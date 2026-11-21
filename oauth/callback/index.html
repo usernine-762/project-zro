@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TikTok authorization — Cooked in GTA 6</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="icon" href="../../app_icon_1024.png" type="image/png">
+</head>
+<body>
+  <header>
+    <a class="brand" href="../../index.html">
+      <img src="../../app_icon_1024.png" alt="">
+      Cooked in GTA 6
+    </a>
+    <nav>
+      <a href="../../index.html">Home</a>
+      <a href="../../privacy.html">Privacy Policy</a>
+      <a href="../../terms.html">Terms of Service</a>
+    </nav>
+  </header>
+  <main>
+    <h1>TikTok authorization</h1>
+    <p class="lead">This page only shows the result of TikTok's sign-in. It does not keep the code or send it anywhere.</p>
+    <div id="result" class="card">
+      <p>Waiting for TikTok's redirect…</p>
+    </div>
+    <p class="note">If you started authorization from the local tool, paste the code back into that tool. If the tool opened a local callback instead, you can close this tab.</p>
+  </main>
+  <footer>
+    <nav>
+      <a href="../../index.html">Home</a>
+      <a href="../../privacy.html">Privacy Policy</a>
+      <a href="../../terms.html">Terms of Service</a>
+    </nav>
+  </footer>
+  <script>
+    const q = new URLSearchParams(window.location.search);
+    const box = document.getElementById("result");
+    const error = q.get("error");
+    const desc = q.get("error_description") || "";
+    const code = q.get("code");
+    const state = q.get("state") || "";
+    const scopes = q.get("scopes") || q.get("scope") || "";
+    if (error) {
+      box.innerHTML = "<h2>Authorization did not finish</h2><p>" +
+        escapeHtml(error + (desc ? " — " + desc : "")) + "</p>";
+    } else if (code) {
+      box.innerHTML = "<h2>Authorization code</h2><p>Copy the code below into the local tool:</p>" +
+        "<pre id='codebox'>" + escapeHtml(code) + "</pre>" +
+        (state ? "<p>State: <code>" + escapeHtml(state) + "</code></p>" : "") +
+        (scopes ? "<p>Scopes granted: <code>" + escapeHtml(scopes) + "</code></p>" : "") +
+        "<p>You can close this page after the tool confirms it is connected.</p>";
+    } else {
+      box.innerHTML = "<h2>No code in this address</h2><p>Open this page only after TikTok redirects you here at the end of sign-in.</p>";
+    }
+    function escapeHtml(s) {
+      return s.replace(/[&<>"'`]/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;","`":"&#96;"
+      }[c]));
+    }
+  </script>
+</body>
+</html>
